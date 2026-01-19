@@ -4,78 +4,81 @@ import { Experience, Project, SkillGroup } from './types';
 export const EXPERIENCES: Experience[] = [
   {
     company: "StatusNeo",
-    role: "Senior Software Engineer (Frontend Architect)",
-    period: "Mar 2022 — Present",
+    role: "Senior Consultant",
+    period: "May 2025 — Present",
     description: [
-      "Leading the migration from legacy monolithic architecture to a performant Micro-Frontend (MFE) system using Module Federation.",
-      "Optimized Core Web Vitals across enterprise dashboards, achieving a 40% reduction in Largest Contentful Paint (LCP).",
-      "Mentored a team of 6 engineers, establishing rigorous code review standards and CI/CD best practices.",
-      "Engineered a custom React UI library used across 3 major product verticals."
+      "Designing and developing end-to-end features using React.js, Next.js, Node.js, and Express.js for enterprise-grade applications.",
+      "Building and maintaining REST APIs with secure authentication and optimized database queries.",
+      "Improving frontend performance by 30% through memoization, code-splitting, and lazy loading.",
+      "Implementing efficient server-state management using React Query, reducing perceived API response times by 40%."
     ],
-    skills: ["Next.js", "Module Federation", "TypeScript", "Performance Tuning", "Redux Toolkit"],
-    performanceMetrics: "30–40% gain in LCP; 98/100 Lighthouse Performance score"
+    skills: ["React.js", "Next.js", "Node.js", "Express.js", "React Query", "Redux"],
+    performanceMetrics: "30% performance boost; 40% reduction in response latency"
   },
   {
     company: "TransFi",
-    role: "Senior Frontend Engineer",
-    period: "Feb 2021 — Feb 2022",
+    role: "Full Stack Developer",
+    period: "Feb 2025 — May 2025",
     description: [
-      "Architected the frontend for a high-security Crypto-to-Fiat gateway with real-time liquidity monitoring.",
-      "Implemented complex state management for multi-step KYC/AML verification flows using React Query.",
-      "Ensured PCI-DSS compliance and high security for global payment gateway integrations (Stripe, Wyre).",
-      "Reduced bundle size by 35% through aggressive tree-shaking and dynamic imports."
+      "Led development of a live crypto–fiat on-ramp platform with scalable frontend flows and secure backend services.",
+      "Architected backend APIs for KYC, payments, and transaction lifecycles using Node.js, Express.js, and MongoDB.",
+      "Optimized platform performance and load times by 30% through advanced data caching and bundle optimization."
     ],
-    skills: ["React", "Crypto APIs", "KYC Systems", "Web Security", "Payment Gateways"],
-    performanceMetrics: "35% bundle reduction; 100% API uptime during launch"
+    skills: ["Node.js", "Express.js", "MongoDB", "Fintech", "Payment Gateways"],
+    performanceMetrics: "30% load time reduction; Live crypto-fiat production launch"
   },
   {
-    company: "TCS",
-    role: "Software Engineer (Full Stack)",
-    period: "July 2019 — Jan 2021",
+    company: "Tata Consultancy Services (TCS)",
+    role: "Full Stack Developer",
+    period: "Apr 2021 — Feb 2025",
     description: [
-      "Developed high-availability automation tools for enterprise infrastructure management.",
-      "Built a Node.js-based RBAC system that secured sensitive financial data for Fortune 500 clients.",
-      "Automated regression testing suites, saving approximately 120 man-hours per sprint cycle."
+      "Enhanced web application performance by 30% through React optimization and sophisticated lazy loading strategies.",
+      "Developed robust backend services for data aggregation and role-based access control (RBAC) with JWT authentication.",
+      "Automated internal workflows, resulting in a 60% reduction in ServiceNow ticket volume."
     ],
-    skills: ["Node.js", "Express", "PostgreSQL", "Unit Testing", "Enterprise Automation"],
-    performanceMetrics: "120h/sprint saved; 60% increase in dev velocity"
+    skills: ["React", "Node.js", "JWT", "RBAC", "Performance Engineering"],
+    performanceMetrics: "60% reduction in support tickets; 30% UI speed improvement"
   }
 ];
 
 export const PROJECTS: Project[] = [
   {
     title: "IndiGo OCC Hub",
-    description: "A mission-critical mission control center dashboard for real-time fleet orchestration and ground operations monitoring.",
+    description: "Mission-critical real-time orchestration dashboard for airline operations. Handled complex fleet state transitions and ground operations visualization.",
     tech: ["Next.js", "Socket.io", "Highcharts", "PostgreSQL"],
   },
   {
     title: "Honeywell Manufacturing",
-    description: "Industrial IoT platform for real-time equipment diagnostics and predictive maintenance visualization.",
+    description: "Industrial IoT platform for equipment diagnostics. Focused on high-throughput data visualization and predictive maintenance UI.",
     tech: ["MERN Stack", "MQTT", "D3.js", "Azure"],
   },
   {
     title: "TransFi Checkout",
-    description: "A production-grade, embeddable widget for instant crypto purchasing with custom branding support.",
+    description: "High-security embeddable widget for instant crypto-fiat transactions. Managed complex verification flows and global payment APIs.",
     tech: ["React", "Styled Components", "Ethers.js"],
   },
   {
-    title: "System Architecture Board",
-    description: "Internal tool for mapping complex microservice dependencies and service health visualization.",
-    tech: ["React", "React Flow", "Prisma", "Node.js"],
+    title: "Internal E-Commerce Platform",
+    description: "Built a custom E-Commerce engine with JWT authentication, Stripe integration, and complex inventory management.",
+    tech: ["React", "Node.js", "Stripe", "Prisma"],
   }
 ];
 
 export const SKILL_GROUPS: SkillGroup[] = [
   {
     category: "Frontend",
-    items: ["React 19", "Next.js 15", "TypeScript", "Redux/Zustand", "Tailwind CSS", "Module Federation"]
+    items: ["React.js", "Next.js", "JavaScript (ES6+)", "TypeScript", "HTML5", "CSS3", "Redux", "Context API", "Tailwind CSS", "Material UI", "Shadcn UI"]
   },
   {
-    category: "Backend & DB",
-    items: ["Node.js", "Express.js", "PostgreSQL", "Prisma ORM", "Redis", "REST/GraphQL"]
+    category: "Backend",
+    items: ["Node.js", "Express.js", "REST API Design", "Authentication", "Webhooks", "Integrations"]
   },
   {
-    category: "Architecture",
-    items: ["Micro-Frontends", "Design Systems", "Web Performance", "CI/CD", "AWS", "Datadog"]
+    category: "Databases",
+    items: ["MongoDB", "MySQL", "PostgreSQL"]
+  },
+  {
+    category: "Tools & Ecosystem",
+    items: ["Git", "GitHub", "CI/CD", "Jenkins", "Datadog", "Mixpanel", "StatCounter", "Prisma"]
   }
 ];
