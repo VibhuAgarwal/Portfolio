@@ -1,8 +1,26 @@
 
 import React, { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'https://esm.sh/framer-motion@^11.0.0';
 import GlassCard from './components/GlassCard';
 import SectionHeader from './components/SectionHeader';
+import ContactForm from './components/ContactForm';
 import { EXPERIENCES, PROJECTS, SKILL_GROUPS } from './constants';
+
+const ProjectVisualization = () => (
+  <div className="absolute inset-0 opacity-10 pointer-events-none overflow-hidden select-none">
+    <svg width="100%" height="100%" viewBox="0 0 200 100" preserveAspectRatio="none">
+      <path d="M0,50 Q50,20 100,50 T200,50" fill="none" stroke="var(--accent)" strokeWidth="0.5" />
+      <path d="M0,60 Q50,90 100,60 T200,60" fill="none" stroke="var(--accent)" strokeWidth="0.5" />
+      <circle cx="50" cy="35" r="2" fill="var(--accent)" />
+      <circle cx="150" cy="65" r="2" fill="var(--accent)" />
+      <line x1="0" y1="20" x2="200" y2="20" stroke="white" strokeWidth="0.1" strokeDasharray="2,2" />
+      <line x1="0" y1="80" x2="200" y2="80" stroke="white" strokeWidth="0.1" strokeDasharray="2,2" />
+    </svg>
+    <div className="absolute top-4 left-4 font-mono text-[6px] text-zinc-500 whitespace-pre">
+      {`0x8823_ARCH_MAP\nSTABLE_NODE: ACTIVE\nLATENCY: 14ms\nENCRYPTION: AES-256`}
+    </div>
+  </div>
+);
 
 const App: React.FC = () => {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
@@ -58,11 +76,11 @@ const App: React.FC = () => {
       <main className="max-w-6xl mx-auto px-6 relative">
         
         {/* HERO SECTION */}
-        <section id="about" className="min-h-[80vh] flex flex-col justify-center items-center mb-16 pt-20 scroll-mt-32">
+        <section id="about" className="min-h-[70vh] flex flex-col justify-center items-center mb-8 pt-20 scroll-mt-32">
           <div className="section-glow top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" />
-          <div 
-            style={{ transform: `translate(${moveX}px, ${moveY}px)` }}
-            className="transition-transform duration-300 ease-out w-full"
+          <motion.div 
+            style={{ x: moveX, y: moveY }}
+            className="w-full"
           >
             <GlassCard className="max-w-5xl mx-auto p-10 md:p-14 border-white/10 relative overflow-hidden">
               <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full pointer-events-none overflow-hidden opacity-20">
@@ -86,34 +104,34 @@ const App: React.FC = () => {
                 </div>
 
                 <div className="flex-grow text-center lg:text-left">
-                  <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10 text-zinc-400 text-[9px] font-bold uppercase tracking-[0.2em] mb-6">
+                  <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10 text-zinc-400 text-[9px] font-bold uppercase tracking-[0.2em] mb-4">
                     <span className="w-1 h-1 rounded-full bg-sky-500" /> Senior Software Engineer
                   </div>
-                  <h1 className="text-5xl md:text-7xl font-black text-gradient mb-4 tracking-tighter leading-[0.9]">
+                  <h1 className="text-5xl md:text-7xl font-black text-gradient mb-3 tracking-tighter leading-[0.9]">
                     Vibhor Agarwal
                   </h1>
-                  <p className="text-sm md:text-base text-zinc-400 font-light mb-8 leading-relaxed max-w-3xl">
-                    Senior Software Engineer with <span className="text-white font-medium">5+ years of experience</span> building scalable, high-performance web applications using <span className="text-sky-400">React.js, Next.js, Node.js, Express.js, JavaScript, Tailwind CSS, Redux</span>. Proven record delivering enterprise and startup-grade products. Led full-stack development of a live crypto-fiat on-ramp platform at <span className="text-white font-medium">TransFi</span> and currently driving frontend engineering initiatives at <span className="text-white font-medium">StatusNeo</span>. Strong in <span className="italic">clean architecture, SSR, state management, lazy loading, code-splitting, and performance optimization</span>.
+                  <p className="text-sm md:text-base text-zinc-400 font-light mb-6 leading-relaxed max-w-3xl">
+                    Senior Software Engineer with <span className="text-white font-medium">5+ years of experience</span> building scalable, high-performance web applications using <span className="text-sky-400">React.js, Next.js, Node.js, Express.js, JavaScript, Tailwind CSS, Redux</span>. Currently driving frontend engineering initiatives at <span className="text-white font-medium">StatusNeo</span> and formerly at <span className="text-white font-medium">TransFi</span> and <span className="text-white font-medium">TCS</span>. Specialist in <span className="italic">clean architecture, SSR, and performance optimization</span>.
                   </p>
                   <div className="flex flex-wrap justify-center lg:justify-start gap-4">
-                    <a href="#experience" onClick={(e) => scrollToSection(e, 'experience')} className="px-8 py-3.5 bg-sky-500 text-white text-xs font-black uppercase tracking-widest rounded-xl hover:bg-sky-400 shadow-lg shadow-sky-500/20 transition-all active:scale-95">
+                    <a href="#experience" onClick={(e) => scrollToSection(e, 'experience')} className="px-8 py-3 bg-sky-500 text-white text-xs font-black uppercase tracking-widest rounded-xl hover:bg-sky-400 shadow-lg shadow-sky-500/20 transition-all active:scale-95">
                       Work Trace
                     </a>
                   </div>
                 </div>
               </div>
             </GlassCard>
-          </div>
+          </motion.div>
         </section>
 
         {/* EXPERIENCE SECTION */}
-        <section id="experience" className="mb-24 scroll-mt-32 relative">
+        <section id="experience" className="mb-12 scroll-mt-32 relative">
           <SectionHeader 
             title="Experience Log" 
-            subtitle="Deep-dives into systems architecture and high-scale product delivery." 
+            subtitle="Systems architecture and product delivery audit." 
           />
           
-          <div className="space-y-12 relative">
+          <div className="space-y-8 relative">
              <div className="absolute left-8 md:left-1/2 top-0 bottom-0 w-[1px] bg-gradient-to-b from-transparent via-sky-500/20 to-transparent hidden md:block">
                 <div className="absolute inset-0 scan-line opacity-50" />
              </div>
@@ -121,151 +139,193 @@ const App: React.FC = () => {
              {EXPERIENCES.map((exp, idx) => {
                const isCurrent = exp.period.includes('Present');
                return (
-                 <div key={idx} className={`relative flex flex-col md:flex-row gap-10 ${idx % 2 === 0 ? 'md:flex-row' : 'md:flex-row-reverse'}`}>
+                 <motion.div 
+                   key={idx} 
+                   initial={{ opacity: 0, y: 20 }}
+                   whileInView={{ opacity: 1, y: 0 }}
+                   viewport={{ once: true }}
+                   transition={{ delay: idx * 0.1 }}
+                   className={`relative flex flex-col md:flex-row gap-6 ${idx % 2 === 0 ? 'md:flex-row' : 'md:flex-row-reverse'}`}
+                 >
                    <div className="md:w-[45%]">
-                     <GlassCard className={`relative overflow-hidden group transition-all duration-500 ${isCurrent ? 'lightning-border !bg-transparent border-0' : 'border-white/5 hover:border-sky-500/20'}`}>
-                       <div className="flex justify-between items-start mb-6">
+                     <GlassCard className={`relative overflow-hidden group transition-all duration-500 ${isCurrent ? 'lightning-data-border shadow-[0_0_40px_rgba(56,189,248,0.1)]' : 'border-white/5 hover:border-sky-500/20'}`}>
+                       <div className="flex justify-between items-start mb-4">
                          <div>
-                           <h3 className="text-xl font-black text-white group-hover:text-sky-400 transition-colors uppercase tracking-tight flex items-center gap-3">
+                           <h3 className="text-lg font-black text-white group-hover:text-sky-400 transition-colors uppercase tracking-tight flex items-center gap-3">
                              {exp.company}
                              {isCurrent && <span className="inline-block w-2 h-2 rounded-full bg-sky-500 shadow-[0_0_8px_#38bdf8] animate-pulse" />}
                            </h3>
-                           <p className="text-zinc-500 text-[10px] font-mono font-bold tracking-widest mt-1 uppercase">{exp.role}</p>
+                           <p className="text-zinc-500 text-[9px] font-mono font-bold tracking-widest mt-1 uppercase">{exp.role}</p>
                          </div>
-                         <div className="text-[9px] font-mono text-zinc-600 bg-white/5 px-2 py-1 rounded border border-white/5">{exp.period}</div>
+                         <div className="text-[8px] font-mono text-zinc-600 bg-white/5 px-2 py-0.5 rounded border border-white/5">{exp.period}</div>
                        </div>
                        
-                       <ul className="space-y-3 mb-8">
+                       <ul className="space-y-2 mb-6">
                          {exp.description.map((desc, i) => (
                            <li key={i} className="text-xs text-zinc-400 leading-relaxed flex gap-3 group-hover:text-zinc-300 transition-colors">
-                             <span className="text-sky-500/40 font-mono">0{i+1}</span>
+                             <span className="text-sky-500/40 font-mono text-[10px]">0{i+1}</span>
                              {desc}
                            </li>
                          ))}
                        </ul>
 
-                       <div className="flex flex-wrap gap-1.5 mb-8">
+                       <div className="flex flex-wrap gap-1.5 mb-6">
                          {exp.skills.map((skill) => (
-                           <span key={skill} className="px-2 py-0.5 bg-white/5 border border-white/5 rounded text-[8px] font-black text-zinc-600 uppercase tracking-tighter hover:text-sky-500 hover:border-sky-500/30 transition-all cursor-default">
+                           <span key={skill} className="px-1.5 py-0.5 bg-white/5 border border-white/5 rounded text-[7px] font-black text-zinc-600 uppercase tracking-tighter hover:text-sky-500 hover:border-sky-500/30 transition-all cursor-default">
                              {skill}
                            </span>
                          ))}
                        </div>
 
                        {exp.performanceMetrics && (
-                         <div className="p-4 bg-sky-500/[0.03] border border-sky-500/10 rounded-xl flex items-center gap-4 group-hover:bg-sky-500/[0.05] transition-all data-glow">
-                           <div className="w-10 h-10 rounded-lg bg-sky-500/10 flex items-center justify-center shrink-0">
-                             <svg className="w-5 h-5 text-sky-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                         <div className="p-3 bg-sky-500/[0.03] border border-sky-500/10 rounded-xl flex items-center gap-4 group-hover:bg-sky-500/[0.05] transition-all data-glow">
+                           <div className="w-8 h-8 rounded-lg bg-sky-500/10 flex items-center justify-center shrink-0">
+                             <svg className="w-4 h-4 text-sky-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
                            </div>
-                           <p className="text-[10px] font-mono font-bold text-sky-400 uppercase tracking-wide leading-tight">{exp.performanceMetrics}</p>
+                           <p className="text-[9px] font-mono font-bold text-sky-400 uppercase tracking-wide leading-tight">{exp.performanceMetrics}</p>
                          </div>
                        )}
                      </GlassCard>
                    </div>
                    <div className="hidden md:flex md:w-[10%] justify-center items-center">
-                      <div className={`w-3 h-3 rounded-full bg-zinc-900 border ${isCurrent ? 'border-sky-500 shadow-[0_0_10px_#38bdf8]' : 'border-white/20'} z-10 transition-all duration-500`} />
+                      <div className={`w-2.5 h-2.5 rounded-full bg-zinc-900 border ${isCurrent ? 'border-sky-500 shadow-[0_0_10px_#38bdf8]' : 'border-white/20'} z-10 transition-all duration-500`} />
                    </div>
                    <div className="hidden md:block md:w-[45%]" />
-                 </div>
+                 </motion.div>
                );
              })}
           </div>
         </section>
 
         {/* PROJECTS SECTION */}
-        <section id="projects" className="mb-24 scroll-mt-32 relative py-12">
-          <div className="absolute inset-0 bg-grid-isometric opacity-30 z-[-1]" />
+        <section id="projects" className="mb-12 scroll-mt-32 relative py-4">
+          <div className="absolute inset-0 bg-grid-isometric opacity-20 z-[-1]" />
           <SectionHeader 
-            title="Internal Product Echoes" 
-            subtitle="Engineered internal prototypes and high-scale production platforms. These systems are protected under NDA." 
+            title="Technical Artifacts" 
+            subtitle="Architectural footprints of internal enterprise systems (Protected by NDA)." 
           />
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
             {PROJECTS.map((project, idx) => (
-              <GlassCard key={idx} className="flex flex-col group p-0 overflow-hidden min-h-[350px] bg-black/40 border-white/5 hover:border-sky-500/30 transition-all duration-700">
-                <div className="h-40 bg-zinc-900/50 relative overflow-hidden border-b border-white/5 flex items-center justify-center">
-                   <div className="absolute inset-0 opacity-20 bg-[radial-gradient(circle_at_center,var(--accent)_0%,transparent_70%)] group-hover:opacity-40 transition-opacity" />
-                   <div className="z-10 text-center px-6">
-                     <p className="text-zinc-600 text-[8px] font-mono mb-2 uppercase tracking-[0.4em]">Sub_System.Instance</p>
-                     <h4 className="text-2xl font-black tracking-tighter text-white uppercase group-hover:scale-105 transition-transform duration-500">{project.title}</h4>
-                   </div>
-                   <div className="absolute bottom-4 right-6 flex items-center gap-2">
-                     <div className="w-1 h-1 rounded-full bg-sky-500 animate-pulse" />
-                     <span className="text-[8px] font-mono text-zinc-500 uppercase tracking-widest">Internal_Only</span>
-                   </div>
-                </div>
-                <div className="p-8 flex flex-col flex-grow relative">
-                  <p className="text-zinc-400 text-sm leading-relaxed mb-10 group-hover:text-zinc-200 transition-colors">
-                    {project.description}
-                  </p>
-                  <div className="mt-auto">
-                    <div className="flex flex-col gap-3">
-                       <span className="text-[9px] font-bold text-zinc-600 uppercase tracking-widest">Stack.json</span>
-                       <div className="flex flex-wrap gap-4">
-                        {project.tech.map(t => (
-                          <span key={t} className="text-[10px] font-mono text-sky-500/60 uppercase group-hover:text-sky-400 transition-colors">
-                            {t}
-                          </span>
-                        ))}
-                       </div>
+              <motion.div
+                key={idx}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                whileHover={{ 
+                  y: -10,
+                  scale: 1.02,
+                  transition: { duration: 0.4, ease: "easeOut" }
+                }}
+                viewport={{ once: true }}
+                className="group relative"
+              >
+                {/* Background Glow Effect */}
+                <div className="absolute -inset-1 bg-gradient-to-r from-sky-500/20 to-indigo-500/20 rounded-3xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                
+                <GlassCard className="h-full flex flex-col p-0 overflow-hidden min-h-[300px] bg-black/60 border-white/10 group-hover:border-sky-500/40 transition-all duration-500 relative z-10">
+                  <div className="h-36 bg-zinc-900/50 relative overflow-hidden border-b border-white/10 flex items-center justify-center">
+                    <ProjectVisualization />
+                    <div className="absolute inset-0 opacity-10 bg-[radial-gradient(circle_at_center,var(--accent)_0%,transparent_70%)] group-hover:opacity-40 transition-opacity duration-700" />
+                    
+                    <div className="z-10 text-center px-6">
+                      <p className="text-zinc-600 text-[7px] font-mono mb-1 uppercase tracking-[0.4em]">Sub_System.Instance</p>
+                      <h4 className="text-xl font-black tracking-tighter text-white uppercase group-hover:text-sky-400 transition-colors duration-500">{project.title}</h4>
+                    </div>
+                    
+                    <div className="absolute bottom-3 right-4 flex items-center gap-1.5 bg-black/40 backdrop-blur-md px-2 py-1 rounded-full border border-white/5">
+                      <div className="w-1 h-1 rounded-full bg-sky-500 animate-pulse" />
+                      <span className="text-[7px] font-mono text-zinc-500 uppercase tracking-widest">Internal_Only</span>
                     </div>
                   </div>
-                </div>
-              </GlassCard>
+
+                  <div className="p-8 flex flex-col flex-grow relative">
+                    <p className="text-zinc-400 text-sm leading-relaxed mb-8 group-hover:text-zinc-200 transition-colors duration-300">
+                      {project.description}
+                    </p>
+                    <div className="mt-auto space-y-4">
+                      <div className="flex flex-col gap-2">
+                        <div className="flex items-center gap-2">
+                          <div className="h-[1px] w-4 bg-sky-500/30" />
+                          <span className="text-[8px] font-bold text-zinc-600 uppercase tracking-[0.2em]">Stack.json</span>
+                        </div>
+                        <div className="flex flex-wrap gap-4">
+                          {project.tech.map(t => (
+                            <span key={t} className="text-[10px] font-mono text-sky-500/50 uppercase group-hover:text-sky-400 group-hover:translate-x-1 transition-all">
+                              {t}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  {/* Glass Inner Shine Overlay */}
+                  <div className="absolute inset-0 pointer-events-none bg-gradient-to-tr from-white/0 via-white/[0.02] to-white/0 opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
+                </GlassCard>
+              </motion.div>
             ))}
           </div>
         </section>
 
         {/* SKILLS SECTION */}
-        <section id="skills" className="mb-24 scroll-mt-32 relative">
-          <SectionHeader title="Technical Stack" subtitle="Core proficiencies across the full product development lifecycle." />
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {SKILL_GROUPS.map((group) => (
-              <GlassCard key={group.category} className="p-6 group/skill hover:bg-sky-500/[0.02] border-white/5 transition-all duration-500">
-                <div className="flex items-center gap-3 mb-6">
-                  <div className="w-2 h-2 rounded-full bg-sky-500 shadow-[0_0_8px_#38bdf8]" />
-                  <h4 className="text-[10px] font-black text-sky-500 uppercase tracking-[0.3em]">{group.category}</h4>
-                </div>
-                <div className="space-y-4">
-                  {group.items.map((item) => (
-                    <div key={item} className="flex flex-col gap-2 group/item">
-                      <div className="flex justify-between items-center">
-                        <span className="text-zinc-300 text-[11px] font-medium group-hover/item:text-white transition-colors uppercase tracking-tight">{item}</span>
-                        <span className="text-[8px] font-mono text-zinc-700 opacity-0 group-hover/item:opacity-100 transition-opacity">OK</span>
+        <section id="skills" className="mb-12 scroll-mt-32 relative">
+          <SectionHeader title="Technical Core" subtitle="Comprehensive stack across frontend, backend, and platform tooling." />
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            {SKILL_GROUPS.map((group, groupIdx) => (
+              <motion.div
+                key={group.category}
+                initial={{ opacity: 0, scale: 0.95 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                viewport={{ once: true }}
+                transition={{ delay: groupIdx * 0.1 }}
+              >
+                <GlassCard className="p-5 group/skill hover:bg-sky-500/[0.02] border-white/5 transition-all duration-500 h-full">
+                  <div className="flex items-center gap-2.5 mb-5">
+                    <div className="w-1.5 h-1.5 rounded-full bg-sky-500 shadow-[0_0_8px_#38bdf8]" />
+                    <h4 className="text-[9px] font-black text-sky-500 uppercase tracking-[0.3em]">{group.category}</h4>
+                  </div>
+                  <div className="space-y-3">
+                    {group.items.map((item) => (
+                      <div key={item} className="flex flex-col gap-1.5 group/item">
+                        <div className="flex justify-between items-center">
+                          <span className="text-zinc-300 text-[10px] font-medium group-hover/item:text-white transition-colors uppercase tracking-tight">{item}</span>
+                          <span className="text-[7px] font-mono text-zinc-700 opacity-0 group-hover/item:opacity-100 transition-opacity">OK</span>
+                        </div>
+                        <div className="w-full h-[1px] bg-white/[0.03] rounded-full overflow-hidden relative">
+                           <div className="absolute inset-0 scan-line opacity-10" />
+                        </div>
                       </div>
-                      <div className="w-full h-[1px] bg-white/[0.03] rounded-full overflow-hidden relative">
-                         <div className="absolute inset-0 scan-line opacity-10" />
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </GlassCard>
+                    ))}
+                  </div>
+                </GlassCard>
+              </motion.div>
             ))}
           </div>
         </section>
 
         {/* CONTACT SECTION */}
-        <section id="contact" className="pb-16 scroll-mt-32">
-          <GlassCard className="p-14 md:p-20 text-center relative overflow-hidden border-sky-500/10 shadow-[0_0_80px_rgba(56,189,248,0.05)]">
+        <section id="contact" className="pb-8 scroll-mt-32">
+          <GlassCard className="p-10 md:p-14 text-center relative overflow-hidden border-sky-500/10 shadow-[0_0_80px_rgba(56,189,248,0.05)]">
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(56,189,248,0.05)_0%,transparent_70%)] opacity-60 pointer-events-none" />
             <div className="relative z-10">
-              <span className="text-sky-500 font-mono text-[10px] font-bold uppercase tracking-[0.5em] mb-4 block">Handshake.Request</span>
-              <h2 className="text-4xl md:text-6xl font-black mb-10 text-gradient tracking-tighter uppercase leading-[0.9]">
-                Ready for the<br/>Next Engineering Hub.
+              <span className="text-sky-500 font-mono text-[9px] font-bold uppercase tracking-[0.5em] mb-3 block">Handshake.Request</span>
+              <h2 className="text-3xl md:text-5xl font-black mb-4 text-gradient tracking-tighter uppercase leading-[0.9]">
+                Initialize Collaboration.
               </h2>
-              <div className="flex flex-wrap justify-center gap-6">
-                <a href="mailto:vibhor.agarwal@example.com" className="group relative px-10 py-4 bg-white text-black text-xs font-black uppercase tracking-widest rounded-xl hover:scale-105 transition-all active:scale-95 shadow-2xl">
-                  Transmit Message
-                </a>
-              </div>
+              <p className="text-zinc-500 text-sm max-w-xl mx-auto mb-8">
+                Currently open to senior-level engineering opportunities and technical architectural consulting. 
+                Drop a packet below to sync.
+              </p>
+              
+              <ContactForm />
             </div>
           </GlassCard>
         </section>
 
       </main>
 
-      <footer className="py-10 border-t border-white/5 text-center bg-black/60 backdrop-blur-3xl">
-        <p className="text-zinc-600 font-mono text-[9px] uppercase tracking-[0.4em] mb-4">
-          Vibhor Agarwal // Senior Engineer // Last_Updated: 2024.10
+      <footer className="py-6 border-t border-white/5 text-center bg-black/60 backdrop-blur-3xl">
+        <p className="text-zinc-600 font-mono text-[8px] uppercase tracking-[0.4em] mb-2">
+          Vibhor Agarwal // Senior Engineer // Last_Sync: 2024.10
         </p>
       </footer>
     </div>

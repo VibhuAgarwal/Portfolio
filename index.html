@@ -36,42 +36,35 @@
             -webkit-text-fill-color: transparent;
         }
 
-        /* Lightning Border Effect */
-        .lightning-border {
+        /* Lightning Data Flow Border - Refined */
+        .lightning-data-border {
             position: relative;
-            z-index: 0;
-            overflow: hidden;
+            background: rgba(56, 189, 248, 0.01);
+            border: 1px solid rgba(56, 189, 248, 0.15);
         }
-        .lightning-border::before {
-            content: '';
+        
+        .lightning-data-border::before {
+            content: "";
             position: absolute;
-            z-index: -2;
-            left: -50%;
-            top: -50%;
-            width: 200%;
-            height: 200%;
-            background-repeat: no-repeat;
-            background-size: 50% 50%, 50% 50%;
-            background-position: 0 0, 100% 0, 100% 100%, 0 100%;
-            background-image: linear-gradient(var(--accent), var(--accent));
-            animation: rotate 4s linear infinite;
-        }
-        .lightning-border::after {
-            content: '';
-            position: absolute;
-            z-index: -1;
-            left: 1px;
-            top: 1px;
-            width: calc(100% - 2px);
-            height: calc(100% - 2px);
-            background: #08080a;
+            inset: 0;
             border-radius: inherit;
-        }
-        @keyframes rotate {
-            100% { transform: rotate(1turn); }
+            padding: 1.5px; 
+            background: linear-gradient(90deg, transparent 0%, var(--accent) 50%, transparent 100%);
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            background-size: 200% 100%;
+            animation: move-light 3s infinite linear;
+            pointer-events: none;
         }
 
-        /* Pulse / Data Flow Glow */
+        @keyframes move-light {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+
+        /* Data Flow Glow for Bottom Borders */
         .data-glow {
             position: relative;
         }
@@ -81,9 +74,9 @@
             bottom: -2px;
             left: 0;
             width: 100%;
-            height: 1px;
+            height: 1.5px;
             background: linear-gradient(90deg, transparent, var(--accent), transparent);
-            animation: flow 3s infinite;
+            animation: flow 2.5s infinite ease-in-out;
         }
         @keyframes flow {
             0% { transform: translateX(-100%); opacity: 0; }
@@ -137,7 +130,8 @@
   "imports": {
     "react": "https://esm.sh/react@^19.2.3",
     "react-dom/": "https://esm.sh/react-dom@^19.2.3/",
-    "react/": "https://esm.sh/react@^19.2.3/"
+    "react/": "https://esm.sh/react@^19.2.3/",
+    "@google/genai": "https://esm.sh/@google/genai@^1.37.0"
   }
 }
 </script>
