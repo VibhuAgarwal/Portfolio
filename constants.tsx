@@ -7,12 +7,13 @@ export const EXPERIENCES: Experience[] = [
     role: "Senior Consultant",
     period: "May 2025 — Present",
     description: [
-      "Designing and developing end-to-end features using React.js, Next.js, Node.js, and Express.js for enterprise-grade applications.",
-      "Building and maintaining REST APIs with secure authentication and optimized database queries.",
-      "Improving frontend performance by 30% through memoization, code-splitting, and lazy loading.",
-      "Implementing efficient server-state management using React Query, reducing perceived API response times by 40%."
+      "Designed and developed end-to-end features using React.js, Next.js, Node.js, and Express.js for enterprise-grade applications.",
+      "Built and maintained REST APIs with secure authentication and optimized database queries.",
+      "Implemented scalable state management using Redux and improved frontend performance by 30% through memoization and code-splitting.",
+      "Integrated backend services with third-party systems and internal platforms, ensuring reliability and data consistency.",
+      "Used React Query for efficient server-state management, reducing API response times by 40%."
     ],
-    skills: ["React.js", "Next.js", "Node.js", "Express.js", "React Query", "Redux"],
+    skills: ["React.js", "Next.js", "Node.js", "Express.js", "Redux", "React Query"],
     performanceMetrics: "30% performance boost; 40% reduction in response latency"
   },
   {
@@ -21,8 +22,8 @@ export const EXPERIENCES: Experience[] = [
     period: "Feb 2025 — May 2025",
     description: [
       "Led development of a live crypto–fiat on-ramp platform with scalable frontend flows and secure backend services.",
-      "Architected backend APIs for KYC, payments, and transaction lifecycles using Node.js, Express.js, and MongoDB.",
-      "Optimized platform performance and load times by 30% through advanced data caching and bundle optimization."
+      "Built APIs using Node.js, Express.js, MongoDB covering KYC, payments, and transaction lifecycles.",
+      "Reduced frontend load time by 30% via code-splitting, memoization, and data caching."
     ],
     skills: ["Node.js", "Express.js", "MongoDB", "Fintech", "Payment Gateways"],
     performanceMetrics: "30% load time reduction; Live crypto-fiat production launch"
@@ -32,35 +33,36 @@ export const EXPERIENCES: Experience[] = [
     role: "Full Stack Developer",
     period: "Apr 2021 — Feb 2025",
     description: [
-      "Enhanced web application performance by 30% through React optimization and sophisticated lazy loading strategies.",
-      "Developed robust backend services for data aggregation and role-based access control (RBAC) with JWT authentication.",
-      "Automated internal workflows, resulting in a 60% reduction in ServiceNow ticket volume."
+      "Improved web application performance by 30% through React optimization and lazy loading.",
+      "Developed backend services using Node.js, Express.js for data aggregation and integrations.",
+      "Designed REST APIs with JWT authentication and role-based access control.",
+      "Automated workflows, reducing ServiceNow tickets by 60%."
     ],
-    skills: ["React", "Node.js", "JWT", "RBAC", "Performance Engineering"],
-    performanceMetrics: "60% reduction in support tickets; 30% UI speed improvement"
+    skills: ["React", "Node.js", "Express.js", "JWT", "RBAC", "Automation"],
+    performanceMetrics: "60% reduction in support tickets; 30% performance improvement"
   }
 ];
 
 export const PROJECTS: Project[] = [
   {
-    title: "IndiGo OCC Hub",
-    description: "Mission-critical real-time orchestration dashboard for airline operations. Handled complex fleet state transitions and ground operations visualization.",
-    tech: ["Next.js", "Socket.io", "Highcharts", "PostgreSQL"],
+    title: "6E Operation Control Centre Hub",
+    description: "Enterprise flight operations system for IndiGo with real-time data aggregation APIs. Orchestrates mission-critical airline operations visualization.",
+    tech: ["Next.js", "React.js", "TypeScript", "Node.js"],
   },
   {
-    title: "Honeywell Manufacturing",
-    description: "Industrial IoT platform for equipment diagnostics. Focused on high-throughput data visualization and predictive maintenance UI.",
-    tech: ["MERN Stack", "MQTT", "D3.js", "Azure"],
+    title: "Honeywell Manufacturing Portal",
+    description: "MERN Stack Manufacturing workflow platform with role-based access, audits, and optimized MongoDB queries.",
+    tech: ["MERN Stack", "MongoDB", "React", "Node.js"],
   },
   {
-    title: "TransFi Checkout",
-    description: "High-security embeddable widget for instant crypto-fiat transactions. Managed complex verification flows and global payment APIs.",
-    tech: ["React", "Styled Components", "Ethers.js"],
+    title: "E-Commerce Web Application",
+    description: "Full-stack platform with JWT auth, Stripe payments, admin dashboards, and optimized search APIs.",
+    tech: ["MERN Stack", "JWT", "Stripe", "React"],
   },
   {
-    title: "Internal E-Commerce Platform",
-    description: "Built a custom E-Commerce engine with JWT authentication, Stripe integration, and complex inventory management.",
-    tech: ["React", "Node.js", "Stripe", "Prisma"],
+    title: "Airbnb Clone",
+    description: "End-to-end booking platform with SSR, authentication, and database-backed listings using Supabase.",
+    tech: ["Next.js", "Prisma", "PostgreSQL", "Supabase"],
   }
 ];
 

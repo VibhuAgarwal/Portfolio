@@ -1,14 +1,16 @@
 
 import React, { useState } from 'react';
+import { motion, AnimatePresence } from 'https://esm.sh/framer-motion@^11.0.0';
 import emailjs from 'https://esm.sh/@emailjs/browser@^4.4.1';
 
-// Helper to safely access environment variables in a browser context
+// Helper to safely access environment variables in the execution context
 const getEnv = (key: string): string => {
-  // Check common locations for build-time injected variables
-  const env = (window as any).process?.env || (globalThis as any).process?.env || (import.meta as any).env || {};
-  
-  // Try direct key, then common prefixes used by Vite/Webpack/CRA
-  return env[key] || env[`VITE_${key}`] || env[`REACT_APP_${key}`] || '';
+  try {
+    // In this specific environment, process.env is the standard source
+    return process.env[key] || '';
+  } catch (e) {
+    return '';
+  }
 };
 
 const ContactForm: React.FC = () => {
@@ -21,7 +23,6 @@ const ContactForm: React.FC = () => {
     message: ''
   });
 
-  // Pulling from environment without hardcoded fallbacks
   const SERVICE_ID = getEnv('SERVICE_ID');
   const TEMPLATE_ID = getEnv('TEMPLATE_ID');
   const PUBLIC_KEY = getEnv('PUBLIC_KEY');
@@ -34,7 +35,7 @@ const ContactForm: React.FC = () => {
     e.preventDefault();
     
     if (!SERVICE_ID || !TEMPLATE_ID || !PUBLIC_KEY) {
-      console.error("Environment variables missing:", { SERVICE_ID, TEMPLATE_ID, PUBLIC_KEY });
+      console.warn("Contact form configuration is incomplete. Check environment variables.");
       addLog("CRITICAL: Environment configuration missing.");
       setStatus('error');
       return;
@@ -72,16 +73,16 @@ const ContactForm: React.FC = () => {
 
       if (response.status === 200) {
         addLog("Transmission successful. Status 200.");
-        await new Promise(resolve => setTimeout(resolve, 600));
+        await new Promise(resolve => setTimeout(resolve, 300));
         setStatus('success');
         setFormData({ name: '', email: '', subject: '', message: '' });
       } else {
-        throw new Error(`Server returned status ${response.status}: ${response.text}`);
+        throw new Error(`Server returned status ${response.status}`);
       }
 
     } catch (err: any) {
-      const errorMsg = err?.text || err?.message || JSON.stringify(err) || "Unknown Protocol Error";
-      console.error("EmailJS Error:", err);
+      const errorMsg = err?.text || err?.message || "Unknown Protocol Error";
+      console.error("Transmission Error:", err);
       addLog(`FAIL: ${errorMsg}`);
       setStatus('error');
       
@@ -97,9 +98,17 @@ const ContactForm: React.FC = () => {
 
   if (status === 'success') {
     return (
-      <div className="mt-10 p-10 border border-emerald-500/20 bg-emerald-500/5 rounded-2xl text-center animate-in fade-in zoom-in duration-500">
+      <motion.div 
+        initial={{ opacity: 0, scale: 0.9, y: 20 }}
+        animate={{ opacity: 1, scale: 1, y: 0 }}
+        className="mt-10 p-10 border border-emerald-500/20 bg-emerald-500/5 rounded-2xl text-center"
+      >
         <div className="w-16 h-16 bg-emerald-500/10 rounded-full flex items-center justify-center mx-auto mb-6 relative">
-          <div className="absolute inset-0 border border-emerald-500/30 rounded-full animate-ping opacity-20" />
+          <motion.div 
+            initial={{ scale: 0 }}
+            animate={{ scale: [0, 1.2, 1] }}
+            className="absolute inset-0 border border-emerald-500/30 rounded-full animate-ping opacity-20" 
+          />
           <svg className="w-8 h-8 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
           </svg>
@@ -114,7 +123,7 @@ const ContactForm: React.FC = () => {
         >
           Reset Connection
         </button>
-      </div>
+      </motion.div>
     );
   }
 
@@ -122,13 +131,17 @@ const ContactForm: React.FC = () => {
     <div className="mt-10 max-w-2xl mx-auto">
       <form onSubmit={handleSubmit} className="text-left space-y-4">
         {status === 'error' && (
-          <div className="p-4 bg-red-500/10 border border-red-500/20 rounded-xl text-red-400 text-[11px] font-mono mb-4 uppercase tracking-wider flex flex-col gap-1">
+          <motion.div 
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: 'auto', opacity: 1 }}
+            className="p-4 bg-red-500/10 border border-red-500/20 rounded-xl text-red-400 text-[11px] font-mono mb-4 uppercase tracking-wider flex flex-col gap-1 overflow-hidden"
+          >
             <div className="flex items-center gap-3">
               <span className="w-2 h-2 bg-red-500 rounded-full animate-pulse" />
               <span>System Alert: Handshake Failed</span>
             </div>
             <div className="text-[9px] opacity-60 ml-5 lowercase">{log[log.length - 1]}</div>
-          </div>
+          </motion.div>
         )}
         
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -196,20 +209,36 @@ const ContactForm: React.FC = () => {
           </div>
         )}
 
-        <button
+        <motion.button
           type="submit"
           disabled={status === 'transmitting'}
+          whileHover={{ scale: 1.01 }}
+          whileTap={{ scale: 0.98 }}
           className="w-full mt-4 group relative px-8 py-4 bg-sky-500 text-white text-xs font-black uppercase tracking-widest rounded-xl hover:bg-sky-400 transition-all active:scale-95 shadow-lg shadow-sky-500/20 disabled:opacity-50 overflow-hidden"
         >
-          <span className={status === 'transmitting' ? 'opacity-0' : 'opacity-100'}>
-            Deploy Packet
-          </span>
-          {status === 'transmitting' && (
-            <div className="absolute inset-0 flex items-center justify-center">
-              <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-            </div>
-          )}
-        </button>
+          <AnimatePresence mode="wait">
+            {status === 'transmitting' ? (
+              <motion.div 
+                key="transmitting"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                className="flex items-center justify-center"
+              >
+                <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+              </motion.div>
+            ) : (
+              <motion.span
+                key="idle"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+              >
+                Deploy Packet
+              </motion.span>
+            )}
+          </AnimatePresence>
+        </motion.button>
       </form>
     </div>
   );
