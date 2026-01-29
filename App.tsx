@@ -4,23 +4,80 @@ import { motion, AnimatePresence, useScroll, useSpring, useTransform, useInView 
 import GlassCard from './components/GlassCard';
 import SectionHeader from './components/SectionHeader';
 import ContactForm from './components/ContactForm';
+import ProjectModal from './components/ProjectModal';
 import { EXPERIENCES, PROJECTS, SKILL_GROUPS } from './constants';
+import { Project } from './types';
 
-const ProjectVisualization = () => (
+const getSkillIcon = (name: string) => {
+  const iconMap: Record<string, string> = {
+    'react.js': 'react',
+    'next.js': 'nextdotjs',
+    'javascript (es6+)': 'javascript',
+    'html5': 'html5',
+    'css3': 'css3',
+    'redux': 'redux',
+    'node.js': 'nodedotjs',
+    'express.js': 'express',
+    'mongodb': 'mongodb',
+    'postgresql': 'postgresql',
+    'mysql': 'mysql',
+    'git': 'git',
+    'github': 'github',
+    'jenkins': 'jenkins',
+    'datadog': 'datadog',
+    'tailwind css': 'tailwindcss',
+    'typescript': 'typescript',
+    'prisma': 'prisma',
+    'material ui': 'mui',
+    'shadcn ui': 'shadcnui',
+    'context api': 'react',
+    'rest api design': 'postman',
+    'jwt': 'jsonwebtokens',
+    'stripe': 'stripe',
+    'supabase': 'supabase',
+    'mixpanel': 'mixpanel'
+  };
+  
+  const slug = name.toLowerCase().trim();
+  const iconSlug = iconMap[slug] || slug.replace(/[\.\s\+]/g, (m) => m === '.' ? 'dot' : m === '+' ? 'plus' : '').replace(/\s+/g, '');
+  
+  return `https://cdn.simpleicons.org/${iconSlug}/ffffff`;
+};
+
+export const ProjectVisualization = ({ size = "small" }: { size?: "small" | "large" }) => (
   <div className="absolute inset-0 opacity-10 pointer-events-none overflow-hidden select-none">
     <svg width="100%" height="100%" viewBox="0 0 200 100" preserveAspectRatio="none">
-      <path d="M0,50 Q50,20 100,50 T200,50" fill="none" stroke="var(--accent)" strokeWidth="0.5" />
-      <path d="M0,60 Q50,90 100,60 T200,60" fill="none" stroke="var(--accent)" strokeWidth="0.5" />
-      <circle cx="50" cy="35" r="2" fill="var(--accent)" />
-      <circle cx="150" cy="65" r="2" fill="var(--accent)" />
+      <path d="M0,50 Q50,20 100,50 T200,50" fill="none" stroke="var(--accent)" strokeWidth={size === "large" ? "0.2" : "0.5"} />
+      <path d="M0,60 Q50,90 100,60 T200,60" fill="none" stroke="var(--accent)" strokeWidth={size === "large" ? "0.2" : "0.5"} />
+      <circle cx="50" cy="35" r={size === "large" ? "1" : "2"} fill="var(--accent)" />
+      <circle cx="150" cy="65" r={size === "large" ? "1" : "2"} fill="var(--accent)" />
       <line x1="0" y1="20" x2="200" y2="20" stroke="white" strokeWidth="0.1" strokeDasharray="2,2" />
       <line x1="0" y1="80" x2="200" y2="80" stroke="white" strokeWidth="0.1" strokeDasharray="2,2" />
     </svg>
-    <div className="absolute top-4 left-4 font-mono text-[6px] text-zinc-500 whitespace-pre">
-      {`0x8823_ARCH_MAP\nSTABLE_NODE: ACTIVE\nLATENCY: 14ms\nENCRYPTION: AES-256`}
+    <div className={`absolute ${size === "large" ? "top-8 left-8" : "top-4 left-4"} font-mono ${size === "large" ? "text-[8px]" : "text-[6px]"} text-zinc-500 whitespace-pre`}>
+      {`0x8823_ARCH_MAP\nSTABLE_NODE: ACTIVE\nLATENCY: 14ms\nENCRYPTION: AES-256\nUPLINK: STABLE`}
     </div>
   </div>
 );
+
+const HeroBackgroundElements = ({ mouseX, mouseY }: { mouseX: any, mouseY: any }) => {
+  const x1 = useTransform(mouseX, [-1, 1], [-30, 30]);
+  const y1 = useTransform(mouseY, [-1, 1], [-30, 30]);
+  const x2 = useTransform(mouseX, [-1, 1], [40, -40]);
+  const y2 = useTransform(mouseY, [-1, 1], [40, -40]);
+
+  return (
+    <div className="absolute inset-0 pointer-events-none overflow-hidden opacity-30">
+      <motion.div style={{ x: x1, y: y1 }} className="absolute top-[10%] left-[15%] w-24 h-24 border border-sky-500/10 rounded-full" />
+      <motion.div style={{ x: x2, y: y2 }} className="absolute bottom-[20%] right-[10%] w-32 h-32 border border-white/5 rounded-lg rotate-12" />
+      <motion.div style={{ x: x1, y: y2 }} className="absolute top-[40%] right-[20%] w-12 h-12 flex items-center justify-center">
+        <div className="w-[1px] h-full bg-sky-500/20 absolute rotate-45" />
+        <div className="w-[1px] h-full bg-sky-500/20 absolute -rotate-45" />
+      </motion.div>
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(56,189,248,0.02)_0%,transparent_50%)]" />
+    </div>
+  );
+};
 
 const RevealSection = ({ children, id, className = "" }: { children: React.ReactNode, id: string, className?: string }) => {
   const ref = useRef(null);
@@ -42,6 +99,7 @@ const RevealSection = ({ children, id, className = "" }: { children: React.React
 
 const App: React.FC = () => {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+  const [selectedProject, setSelectedProject] = useState<Project | null>(null);
   const { scrollYProgress } = useScroll();
   
   const springConfig = { stiffness: 150, damping: 30, restDelta: 0.001 };
@@ -76,18 +134,15 @@ const App: React.FC = () => {
     }
   };
 
- const handleDownloadCV = () => {
-  const fileName = 'Resume_vibhor.pdf';
-
-  const link = document.createElement('a');
-  link.href = `/${fileName}`; // served from public/
-  link.download = fileName;
-
-  document.body.appendChild(link);
-  link.click();
-  document.body.removeChild(link);
-};
-
+  const handleDownloadCV = () => {
+    const fileName = 'Resume_Vibhor.pdf';
+    const link = document.createElement('a');
+    link.href = `./${fileName}`;
+    link.download = fileName;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
 
   const foregroundX = useTransform(smoothMouseX, [ -1, 1 ], [ -15, 15 ]);
   const foregroundY = useTransform(smoothMouseY, [ -1, 1 ], [ -15, 15 ]);
@@ -98,6 +153,15 @@ const App: React.FC = () => {
 
   return (
     <div className="min-h-screen relative selection:bg-sky-500/30 overflow-hidden">
+      <AnimatePresence>
+        {selectedProject && (
+          <ProjectModal 
+            project={selectedProject} 
+            onClose={() => setSelectedProject(null)} 
+          />
+        )}
+      </AnimatePresence>
+
       <div 
         className="fixed inset-0 pointer-events-none z-[1] transition-opacity duration-500"
         style={{
@@ -138,9 +202,9 @@ const App: React.FC = () => {
               transition={{ repeat: Infinity, duration: 2 }}
               className="w-1.5 h-1.5 rounded-full bg-emerald-500 shadow-[0_0_8px_#10b981]" 
             />
-            <span className="text-[10px] font-bold uppercase tracking-widest text-emerald-500 transition-colors">Operational</span>
+            <span className="text-[10px] font-bold uppercase tracking-widest text-emerald-500 transition-colors">Immediate Joiner</span>
           </div>
-          {['About', 'Experience', 'Projects', 'Skills'].map((item) => (
+          {['About', 'Skills', 'Experience', 'Projects'].map((item) => (
             <a 
               key={item} 
               href={`#${item.toLowerCase()}`}
@@ -165,7 +229,9 @@ const App: React.FC = () => {
           >
             <div className="section-glow top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 opacity-50" />
             
-            <GlassCard className="max-w-5xl mx-auto p-10 md:p-14 border-white/10 relative overflow-hidden shadow-[0_32px_64px_-16px_rgba(0,0,0,0.6)] backdrop-blur-3xl">
+            <GlassCard className="max-w-5xl mx-auto p-10 md:p-14 border-white/10 relative overflow-hidden shadow-[0_32px_80px_-16px_rgba(0,0,0,0.8)] backdrop-blur-3xl">
+              <HeroBackgroundElements mouseX={smoothMouseX} mouseY={smoothMouseY} />
+              
               <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full pointer-events-none overflow-hidden opacity-20">
                 <div className="radar-pulse w-full h-full left-0 top-0" style={{ animationDelay: '0s' }} />
                 <div className="radar-pulse w-full h-full left-0 top-0" style={{ animationDelay: '2s' }} />
@@ -239,11 +305,11 @@ const App: React.FC = () => {
                     <motion.a 
                       whileHover={{ scale: 1.05, x: 5 }}
                       whileTap={{ scale: 0.95 }}
-                      href="#experience" 
-                      onClick={(e) => scrollToSection(e, 'experience')} 
+                      href="#skills" 
+                      onClick={(e) => scrollToSection(e, 'skills')} 
                       className="px-8 py-3 bg-sky-500 text-white text-[11px] font-black uppercase tracking-widest rounded-xl hover:bg-sky-400 shadow-lg shadow-sky-500/20 transition-all"
                     >
-                      Work Trace ➜
+                      View Stack ➜
                     </motion.a>
                     <motion.button 
                       whileHover={{ scale: 1.05, x: 5, backgroundColor: "rgba(255, 255, 255, 0.08)" }}
@@ -261,6 +327,102 @@ const App: React.FC = () => {
               </div>
             </GlassCard>
           </motion.div>
+        </RevealSection>
+
+        <RevealSection id="skills" className="mb-24">
+          <SectionHeader title="Technical Core" subtitle="Comprehensive stack across frontend, backend, and platform tooling." />
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {SKILL_GROUPS.map((group, groupIdx) => (
+              <motion.div 
+                key={group.category}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: groupIdx * 0.1 }}
+              >
+                <GlassCard className="p-6 group/skill hover:bg-sky-500/[0.04] border-white/10 transition-all duration-500 h-full relative overflow-hidden">
+                  <div className="flex items-center gap-3 mb-6 relative z-10">
+                    <motion.div 
+                      animate={{ scale: [1, 1.3, 1] }}
+                      transition={{ repeat: Infinity, duration: 4 }}
+                      className="w-2 h-2 rounded-full bg-sky-500 shadow-[0_0_10px_#38bdf8]" 
+                    />
+                    <h4 className="text-[10px] font-black text-sky-500 uppercase tracking-[0.4em]">{group.category}</h4>
+                  </div>
+                  <div className="space-y-4 relative z-10">
+                    {group.items.map((item, itemIdx) => (
+                      <motion.div 
+                        key={item} 
+                        initial={{ opacity: 0, x: -10 }}
+                        whileInView={{ opacity: 1, x: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ delay: (groupIdx * 0.1) + (itemIdx * 0.05) }}
+                        className="group/item relative"
+                      >
+                        <motion.div 
+                          whileHover={{ 
+                            scale: 1.05, 
+                            x: 8,
+                            backgroundColor: "rgba(56, 189, 248, 0.08)",
+                          }}
+                          className="flex justify-between items-center p-2 -m-2 rounded-lg transition-all duration-300 border border-transparent hover:border-sky-500/20 hover:shadow-[0_0_15px_rgba(56,189,248,0.1)] cursor-default"
+                        >
+                          <div className="flex items-center gap-3 w-full">
+                            <div className="w-5 h-5 flex items-center justify-center shrink-0 relative">
+                              <img 
+                                src={getSkillIcon(item)} 
+                                alt={item} 
+                                className="w-4 h-4 object-contain opacity-70 brightness-90 grayscale group-hover/item:opacity-100 group-hover/item:grayscale-0 group-hover/item:brightness-100 transition-all duration-500"
+                                style={{ 
+                                  filter: 'drop-shadow(0 0 0px transparent)'
+                                }}
+                                onMouseOver={(e) => {
+                                  e.currentTarget.style.filter = 'drop-shadow(0 0 4px rgba(56, 189, 248, 0.6))';
+                                }}
+                                onMouseOut={(e) => {
+                                  e.currentTarget.style.filter = 'drop-shadow(0 0 0px transparent)';
+                                }}
+                                onError={(e) => {
+                                  (e.target as HTMLImageElement).classList.add('hidden');
+                                  const fallback = (e.target as HTMLImageElement).nextElementSibling;
+                                  if (fallback) fallback.classList.remove('hidden');
+                                }}
+                              />
+                              <div className="hidden w-2.5 h-2.5 bg-sky-500/40 rounded-full border border-sky-500/20 shadow-[0_0_8px_rgba(56,189,248,0.3)] animate-pulse" title="System Node" />
+                            </div>
+                            <span className="text-zinc-300 text-xs font-medium group-hover/item:text-white transition-colors uppercase tracking-tight truncate">{item}</span>
+                          </div>
+                          
+                          <div className="flex items-center gap-2 overflow-hidden shrink-0">
+                            <motion.span 
+                              initial={{ opacity: 0, x: 10 }}
+                              whileHover={{ opacity: 1, x: 0 }}
+                              className="text-[8px] font-mono text-sky-500/60 flex items-center gap-1.5 whitespace-nowrap"
+                            >
+                              <span className="w-1 h-1 bg-sky-500 rounded-full animate-pulse" />
+                              VERIFIED
+                            </motion.span>
+                          </div>
+                        </motion.div>
+                        
+                        <div className="w-full h-[1px] bg-white/[0.05] rounded-full overflow-hidden relative mt-1">
+                           <motion.div 
+                             className="absolute inset-0 bg-sky-500/20"
+                             initial={{ x: "-100%" }}
+                             whileHover={{ x: "100%" }}
+                             transition={{ duration: 0.6 }}
+                           />
+                        </div>
+                      </motion.div>
+                    ))}
+                  </div>
+                  <div className="absolute bottom-[-20px] right-[-10px] text-[40px] font-black text-white/[0.02] uppercase pointer-events-none select-none">
+                    {group.category.split(' ')[0]}
+                  </div>
+                </GlassCard>
+              </motion.div>
+            ))}
+          </div>
         </RevealSection>
 
         <RevealSection id="experience" className="mb-24">
@@ -361,14 +523,15 @@ const App: React.FC = () => {
           <div className="absolute inset-0 bg-grid-isometric opacity-20 z-[-1]" />
           <SectionHeader 
             title="Technical Artifacts" 
-            subtitle="Architectural footprints of mission-critical systems." 
+            subtitle="Architectural footprints of mission-critical systems. Click to explore details." 
           />
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
             {PROJECTS.map((project, idx) => (
               <motion.div
                 key={idx}
                 whileHover={{ y: -12 }}
-                className="group relative"
+                onClick={() => setSelectedProject(project)}
+                className="group relative cursor-pointer"
               >
                 <div className="absolute -inset-1 bg-gradient-to-r from-sky-500/20 to-indigo-500/20 rounded-3xl blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
                 
@@ -382,18 +545,30 @@ const App: React.FC = () => {
                       <h4 className="text-2xl font-black tracking-tighter text-white uppercase group-hover:text-sky-400 transition-colors duration-500">{project.title}</h4>
                     </div>
                     
-                    <div className="absolute bottom-4 right-5 flex items-center gap-2 bg-black/60 backdrop-blur-md px-3 py-1.5 rounded-full border border-white/10">
+                    <motion.div 
+                      initial={{ scale: 1 }}
+                      animate={{ 
+                        scale: [1, 1.05, 1],
+                        opacity: [0.7, 1, 0.7]
+                      }}
+                      transition={{ 
+                        repeat: Infinity, 
+                        duration: 3, 
+                        ease: "easeInOut" 
+                      }}
+                      className="absolute bottom-4 right-5 flex items-center gap-2 bg-black/60 backdrop-blur-md px-3 py-1.5 rounded-full border border-white/10 group-hover:border-sky-500/30 transition-colors"
+                    >
                       <motion.div 
                         animate={{ opacity: [0.4, 1, 0.4] }}
                         transition={{ repeat: Infinity, duration: 1.5 }}
                         className="w-1.5 h-1.5 rounded-full bg-sky-500" 
                       />
-                      <span className="text-[8px] font-mono text-zinc-400 uppercase tracking-widest">Internal_Access</span>
-                    </div>
+                      <span className="text-[8px] font-mono text-zinc-400 group-hover:text-sky-400 uppercase tracking-widest transition-colors">Explore_Module</span>
+                    </motion.div>
                   </div>
 
                   <div className="p-8 flex flex-col flex-grow relative">
-                    <p className="text-zinc-400 text-sm leading-relaxed mb-10 group-hover:text-zinc-100 transition-colors duration-300">
+                    <p className="text-zinc-400 text-sm leading-relaxed mb-10 group-hover:text-zinc-100 transition-colors duration-300 line-clamp-3">
                       {project.description}
                     </p>
                     <div className="mt-auto">
@@ -402,7 +577,7 @@ const App: React.FC = () => {
                           <span className="text-[9px] font-bold text-zinc-500 uppercase tracking-[0.3em]">Dependency_Map</span>
                         </div>
                         <div className="flex flex-wrap gap-5">
-                          {project.tech.map(t => (
+                          {project.tech.slice(0, 4).map(t => (
                             <motion.span 
                               key={t} 
                               whileHover={{ x: 4, color: "#38bdf8" }}
@@ -411,6 +586,9 @@ const App: React.FC = () => {
                               <span className="text-[8px] opacity-30">#</span>{t}
                             </motion.span>
                           ))}
+                          {project.tech.length > 4 && (
+                            <span className="text-[11px] font-mono text-zinc-600 uppercase">+{project.tech.length - 4} MORE</span>
+                          )}
                         </div>
                     </div>
                   </div>
@@ -420,86 +598,8 @@ const App: React.FC = () => {
           </div>
         </RevealSection>
 
-        <RevealSection id="skills" className="mb-24">
-          <SectionHeader title="Technical Core" subtitle="Comprehensive stack across frontend, backend, and platform tooling." />
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {SKILL_GROUPS.map((group, groupIdx) => (
-              <motion.div 
-                key={group.category}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: groupIdx * 0.1 }}
-              >
-                <GlassCard className="p-6 group/skill hover:bg-sky-500/[0.04] border-white/10 transition-all duration-500 h-full relative overflow-hidden">
-                  <div className="flex items-center gap-3 mb-6 relative z-10">
-                    <motion.div 
-                      animate={{ scale: [1, 1.3, 1] }}
-                      transition={{ repeat: Infinity, duration: 4 }}
-                      className="w-2 h-2 rounded-full bg-sky-500 shadow-[0_0_10px_#38bdf8]" 
-                    />
-                    <h4 className="text-[10px] font-black text-sky-500 uppercase tracking-[0.4em]">{group.category}</h4>
-                  </div>
-                  <div className="space-y-4 relative z-10">
-                    {group.items.map((item, itemIdx) => (
-                      <motion.div 
-                        key={item} 
-                        initial={{ opacity: 0, x: -10 }}
-                        whileInView={{ opacity: 1, x: 0 }}
-                        viewport={{ once: true }}
-                        transition={{ delay: (groupIdx * 0.1) + (itemIdx * 0.05) }}
-                        className="group/item relative"
-                      >
-                        <motion.div 
-                          whileHover={{ 
-                            scale: 1.05, 
-                            x: 8,
-                            backgroundColor: "rgba(56, 189, 248, 0.08)",
-                          }}
-                          className="flex justify-between items-center p-2 -m-2 rounded-lg transition-all duration-300 border border-transparent hover:border-sky-500/20 hover:shadow-[0_0_15px_rgba(56,189,248,0.1)] cursor-default"
-                        >
-                          <div className="flex items-center gap-2">
-                            <motion.div 
-                              className="w-1 h-1 bg-sky-500/40 rounded-full group-hover/item:bg-sky-500 transition-colors"
-                              animate={{ scale: [1, 1.5, 1] }}
-                              transition={{ repeat: Infinity, duration: 2, delay: itemIdx * 0.2 }}
-                            />
-                            <span className="text-zinc-300 text-xs font-medium group-hover/item:text-white transition-colors uppercase tracking-tight">{item}</span>
-                          </div>
-                          
-                          <div className="flex items-center gap-2 overflow-hidden">
-                            <motion.span 
-                              initial={{ opacity: 0, x: 10 }}
-                              whileHover={{ opacity: 1, x: 0 }}
-                              className="text-[8px] font-mono text-sky-500/60 flex items-center gap-1.5 whitespace-nowrap"
-                            >
-                              <span className="w-1 h-1 bg-sky-500 rounded-full animate-pulse" />
-                              VERIFIED
-                            </motion.span>
-                          </div>
-                        </motion.div>
-                        
-                        <div className="w-full h-[1px] bg-white/[0.05] rounded-full overflow-hidden relative mt-1">
-                           <motion.div 
-                             className="absolute inset-0 bg-sky-500/20"
-                             initial={{ x: "-100%" }}
-                             whileHover={{ x: "100%" }}
-                             transition={{ duration: 0.6 }}
-                           />
-                        </div>
-                      </motion.div>
-                    ))}
-                  </div>
-                  <div className="absolute bottom-[-20px] right-[-10px] text-[40px] font-black text-white/[0.02] uppercase pointer-events-none select-none">
-                    {group.category.split(' ')[0]}
-                  </div>
-                </GlassCard>
-              </motion.div>
-            ))}
-          </div>
-        </RevealSection>
-
         <RevealSection id="contact" className="pb-16">
+          <SectionHeader title="Connection Protocol" subtitle="Establish a secure communication link for technical collaboration." />
           <GlassCard className="p-10 md:p-16 text-center relative overflow-hidden border-sky-500/20 shadow-[0_0_100px_rgba(56,189,248,0.08)] bg-black/60">
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(56,189,248,0.08)_0%,transparent_70%)] opacity-80 pointer-events-none" />
             <div className="relative z-10">
@@ -528,11 +628,11 @@ const App: React.FC = () => {
       <footer className="py-10 border-t border-white/5 text-center bg-[#030305] relative z-20">
         <div className="max-w-6xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-4">
           <p className="text-zinc-600 font-mono text-[9px] uppercase tracking-[0.5em]">
-            Vibhor Agarwal // Senior Systems Engineer // {new Date().getFullYear()}
+            Vibhor Agarwal // Senior System Engineer // {new Date().getFullYear()}
           </p>
           <div className="flex gap-6">
-             <a href="#" className="text-[9px] font-mono text-zinc-700 hover:text-sky-500 transition-colors uppercase tracking-widest">LinkedIn</a>
-             <a href="#" className="text-[9px] font-mono text-zinc-700 hover:text-sky-500 transition-colors uppercase tracking-widest">GitHub</a>
+             <a href="https://www.linkedin.com/in/vibhor-agarwal12" target="_blank" rel="noopener noreferrer" className="text-[9px] font-mono text-zinc-700 hover:text-sky-500 transition-colors uppercase tracking-widest">LinkedIn</a>
+             <a href="https://github.com/vibhuagarwal" target="_blank" rel="noopener noreferrer" className="text-[9px] font-mono text-zinc-700 hover:text-sky-500 transition-colors uppercase tracking-widest">GitHub</a>
              <a href="#" className="text-[9px] font-mono text-zinc-700 hover:text-sky-500 transition-colors uppercase tracking-widest">Terminal_Log</a>
           </div>
         </div>
