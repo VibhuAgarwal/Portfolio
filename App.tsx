@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect, useRef } from 'react';
-import { motion, AnimatePresence, useScroll, useSpring, useTransform, useInView } from 'https://esm.sh/framer-motion@^11.0.0';
+import { motion, AnimatePresence, useScroll, useSpring, useTransform, useInView, MotionValue } from 'https://esm.sh/framer-motion@^11.0.0';
 import GlassCard from './components/GlassCard';
 import SectionHeader from './components/SectionHeader';
 import ContactForm from './components/ContactForm';
@@ -41,6 +41,7 @@ const getSkillIcon = (name: string) => {
   const slug = name.toLowerCase().trim();
   const iconSlug = iconMap[slug] || slug.replace(/[\.\s\+]/g, (m) => m === '.' ? 'dot' : m === '+' ? 'plus' : '').replace(/\s+/g, '');
   
+  // Consistently white themed icons from Simple Icons CDN
   return `https://cdn.simpleicons.org/${iconSlug}/ffffff`;
 };
 
@@ -60,7 +61,8 @@ export const ProjectVisualization = ({ size = "small" }: { size?: "small" | "lar
   </div>
 );
 
-const HeroBackgroundElements = ({ mouseX, mouseY }: { mouseX: any, mouseY: any }) => {
+// Improved types for mouse motion values
+const HeroBackgroundElements = ({ mouseX, mouseY }: { mouseX: MotionValue<number>, mouseY: MotionValue<number> }) => {
   const x1 = useTransform(mouseX, [-1, 1], [-30, 30]);
   const y1 = useTransform(mouseY, [-1, 1], [-30, 30]);
   const x2 = useTransform(mouseX, [-1, 1], [40, -40]);
@@ -79,7 +81,13 @@ const HeroBackgroundElements = ({ mouseX, mouseY }: { mouseX: any, mouseY: any }
   );
 };
 
-const RevealSection = ({ children, id, className = "" }: { children: React.ReactNode, id: string, className?: string }) => {
+interface RevealSectionProps {
+  children: React.ReactNode;
+  id: string;
+  className?: string;
+}
+
+const RevealSection: React.FC<RevealSectionProps> = ({ children, id, className = "" }) => {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
 
@@ -372,12 +380,12 @@ const App: React.FC = () => {
                               <img 
                                 src={getSkillIcon(item)} 
                                 alt={item} 
-                                className="w-4 h-4 object-contain opacity-70 brightness-90 grayscale group-hover/item:opacity-100 group-hover/item:grayscale-0 group-hover/item:brightness-100 transition-all duration-500"
+                                className="w-4 h-4 object-contain opacity-70 brightness-90 transition-all duration-500 group-hover/item:opacity-100 group-hover/item:brightness-110"
                                 style={{ 
                                   filter: 'drop-shadow(0 0 0px transparent)'
                                 }}
                                 onMouseOver={(e) => {
-                                  e.currentTarget.style.filter = 'drop-shadow(0 0 4px rgba(56, 189, 248, 0.6))';
+                                  e.currentTarget.style.filter = 'drop-shadow(0 0 6px rgba(56, 189, 248, 0.8))';
                                 }}
                                 onMouseOut={(e) => {
                                   e.currentTarget.style.filter = 'drop-shadow(0 0 0px transparent)';
@@ -559,9 +567,9 @@ const App: React.FC = () => {
                       className="absolute bottom-4 right-5 flex items-center gap-2 bg-black/60 backdrop-blur-md px-3 py-1.5 rounded-full border border-white/10 group-hover:border-sky-500/30 transition-colors"
                     >
                       <motion.div 
-                        animate={{ opacity: [0.4, 1, 0.4] }}
-                        transition={{ repeat: Infinity, duration: 1.5 }}
-                        className="w-1.5 h-1.5 rounded-full bg-sky-500" 
+                        animate={{ opacity: [0.4, 1, 0.4], scale: [1, 1.5, 1] }}
+                        transition={{ repeat: Infinity, duration: 2 }}
+                        className="w-1.5 h-1.5 rounded-full bg-sky-500 shadow-[0_0_8px_#38bdf8]" 
                       />
                       <span className="text-[8px] font-mono text-zinc-400 group-hover:text-sky-400 uppercase tracking-widest transition-colors">Explore_Module</span>
                     </motion.div>
