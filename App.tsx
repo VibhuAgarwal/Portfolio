@@ -142,16 +142,6 @@ const App: React.FC = () => {
     }
   };
 
-  const handleDownloadCV = () => {
-    const fileName = 'Resume_Vibhor.pdf';
-    const link = document.createElement('a');
-    link.href = `./${fileName}`;
-    link.download = fileName;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-  };
-
   const foregroundX = useTransform(smoothMouseX, [ -1, 1 ], [ -15, 15 ]);
   const foregroundY = useTransform(smoothMouseY, [ -1, 1 ], [ -15, 15 ]);
   const backgroundX = useTransform(smoothMouseX, [ -1, 1 ], [ 40, -40 ]);
@@ -319,17 +309,17 @@ const App: React.FC = () => {
                     >
                       View Stack ➜
                     </motion.a>
-                    <motion.button 
+                    <motion.a 
                       whileHover={{ scale: 1.05, x: 5, backgroundColor: "rgba(255, 255, 255, 0.08)" }}
                       whileTap={{ scale: 0.95 }}
-                      onClick={handleDownloadCV}
-                      className="px-8 py-3 bg-white/5 border border-white/10 text-white text-[11px] font-black uppercase tracking-widest rounded-xl hover:border-sky-500/40 transition-all flex items-center gap-2"
+                      href="Resume_Vibhor.pdf"
+                      className="px-8 py-3 bg-white/5 border border-white/10 text-white text-[11px] font-black uppercase tracking-widest rounded-xl hover:border-sky-500/40 transition-all flex items-center gap-2 cursor-pointer"
                     >
                       <svg className="w-4 h-4 text-sky-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
                       </svg>
                       Download CV
-                    </motion.button>
+                    </motion.a>
                   </div>
                 </div>
               </div>
